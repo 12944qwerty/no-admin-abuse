@@ -22,10 +22,12 @@ module.exports = class NoAdminAbuse extends Plugin {
             return res;
         })
 
-        const id = 'guild-profile';
+        const id = 'toggle-channel-reordering';
         const Menu = await getModule(m => m.default?.displayName === 'Menu');
         inject('toggleable-settings', Menu, 'default', ([{children}], res) => { // Thanks Marvin/Guild Profile
             if (res.props.children.props.id !== 'guild-header-popout') return res;
+
+            console.log(res);
 
             const canReorder = this.settings.get('no-channel-reorder', false);
 
