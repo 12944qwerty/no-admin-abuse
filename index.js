@@ -37,10 +37,10 @@ module.exports = class NoAdminAbuse extends Plugin {
         const id = 'toggle-channel-reordering';
         const Menu = await getModule(m => m.default?.displayName === 'Menu');
         inject('toggleable-settings', Menu, 'default', ([{children}], res) => { // Thanks Marvin/Guild Profile
-            if (res.props.children.props.id !== 'guild-header-popout') return res;
+            if (res.props.children.props.id !== 'guild-header-popout' && res.props.children.props.id !== 'favorites-header-popout') return res;
 
             const guild = getGuild(getGuildId());
-            if (!can(Permissions.MANAGE_CHANNELS, guild)) return res;
+            if (!can(Permissions.MANAGE_CHANNELS, guild) && guild.name !== "Favorites") return res;
 
             const canReorder = this.settings.get('no-channel-reorder', false);
 
@@ -51,8 +51,8 @@ module.exports = class NoAdminAbuse extends Plugin {
                         null,
                         React.createElement(Menu.MenuCheckboxItem, {
                             id: 'toggle-channel-reordering',
-                            label: 'Can Reorder Channels',
-                            checked: !canReorder,
+                            label: 'Lock Channel Positions',
+                            checked: canReorder,
                             action: () => {
                                 this.settings.set('no-channel-reorder', !canReorder);
                             },
