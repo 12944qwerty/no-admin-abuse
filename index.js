@@ -20,7 +20,14 @@ module.exports = class NoAdminAbuse extends Plugin {
         });    
 
         const ConnectedTextChannel = await getModule((m) => m.default?.displayName === 'ConnectedTextChannel');
-        inject('no-reordering-channel', ConnectedTextChannel, 'default', (args, res) => {
+        inject('no-reordering-tchannel', ConnectedTextChannel, 'default', (args, res) => {
+            if (this.settings.get('no-channel-reorder', false)) {
+                res.props.canReorderChannel = false;
+            }
+            return res;
+        });
+        const ConnectedVoiceChannel = await getModule((m) => m.default?.displayName === 'ConnectedVoiceChannel');
+        inject('no-reordering-vchannel', ConnectedVoiceChannel, 'default', (args, res) => {
             if (this.settings.get('no-channel-reorder', false)) {
                 res.props.canReorderChannel = false;
             }
@@ -31,11 +38,9 @@ module.exports = class NoAdminAbuse extends Plugin {
         const Menu = await getModule(m => m.default?.displayName === 'Menu');
         inject('toggleable-settings', Menu, 'default', ([{children}], res) => { // Thanks Marvin/Guild Profile
             if (res.props.children.props.id !== 'guild-header-popout') return res;
-            
+
             const guild = getGuild(getGuildId());
             if (!can(Permissions.MANAGE_CHANNELS, guild)) return res;
-
-            console.log(res);
 
             const canReorder = this.settings.get('no-channel-reorder', false);
 
@@ -66,7 +71,8 @@ module.exports = class NoAdminAbuse extends Plugin {
     }
 
     pluginWillUnload() {
-        uninject('no-reordering-channel');
+        uninject('no-reordering-tchannel');
+        uninject('no-reordering-vchannel');
         uninject('toggleable-settings');
         powercord.api.settings.unregisterSettings(this.entityID);
     }
