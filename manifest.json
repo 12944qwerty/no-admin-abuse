@@ -3,5 +3,5 @@
   "description": "Prevents certain admin actions from being executed via toggleable settings.",
   "author": "12944qwerty",
   "license": "OSL-3.0",
-  "version": "1.0.2"
+  "version": "1.1.0"
 }

@@ -8,5 +8,12 @@ module.exports = ({ getSetting, toggleSetting }) => <>
             toggleSetting('no-channel-reorder', false)
         }}
         note="When enabled, channels will not reorder when dragged."
-    >Don't Reorder Channels</SwitchItem>
+    >Lock Channel Positions</SwitchItem>
+    <SwitchItem
+        value={getSetting('no-category-reorder', false)}
+        onChange={() => {
+            toggleSetting('no-category-reorder', false)
+        }}
+        note="When enabled, categories will not reorder when dragged."
+    >Lock Category Positions</SwitchItem>
 </>
