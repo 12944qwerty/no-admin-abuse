@@ -24,12 +24,13 @@ class TextAreaWrapper extends React.Component { // needs to be in index for rere
         const isLocked = this.props.settings.get(this.props.args[0].channel.id, false)
         const heading = getModule(['heading-md/medium'], false)['heading-md/medium'];
         const { defaultColor } = getModule(['defaultColor'], false);
-        const { title, button, buttonContainer, wrapper, content } = getModule(['title', 'wrapper', 'text'], false);
+        const { title, button, buttonContainer, wrapper, image, content } = getModule(['title', 'wrapper', 'text'], false);
         const { sizeSmall, contents, grow, button: button2, lookFilled, colorPrimary } = getModule(['sizeSmall', 'contents'], false);
 	    if (isLocked) {
             return (
                 <div className={wrapper}>
                     <div className={content}>
+                        <img alt="" src="/assets/60ea1d16163c13845ccf31e70fd6528b.svg" class={image} />
                         <div className="text-[]">
                             <h3 className={`${defaultColor} ${heading} ${title}`} data-text-variant="heading-md/medium">Unlock this channel to speak in it.</h3>
                         </div>
