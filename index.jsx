@@ -191,7 +191,7 @@ module.exports = class NoAdminAbuse extends Plugin {
             if (res.props.children.props.id !== 'guild-header-popout' && res.props.children.props.id !== 'favorites-header-popout') return res;
 
             const guild = getGuild(getGuildId());
-            if (!can(Permissions.MANAGE_CHANNELS, guild) && guild.name !== "Favorites") return res;
+            if (!can(Permissions.MANAGE_CHANNELS, guild) && getGuildId() !== "@favorites") return res;
 
             const canReorder = this.settings.get('no-channel-reorder', false);
             const canCatReorder = this.settings.get('no-category-reorder', false);
