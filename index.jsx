@@ -44,7 +44,7 @@ class TextAreaWrapper extends React.Component { // needs to be in index for rere
                         <button type="button" onClick={() => {
                             let sets = this.props.settings.get('channels', [])
                             if (isLocked) {
-                                sets.filter(i => i === this.props.args[0].channel.id);
+                                sets = sets.filter(i => i !== this.props.args[0].channel.id);
                             } else {
                                 sets.push(this.props.args[0].channel.id)
                             }
@@ -119,7 +119,7 @@ module.exports = class NoAdminAbuse extends Plugin {
                         onClick: () => {try{
                             let sets = this.settings.get('channels', [])
                             if (isLocked) {
-                                sets.filter(i => i === args[0].children[2].key);
+                                sets = sets.filter(i => i !== args[0].children[2].key);
                             } else {
                                 sets.push(args[0].children[2].key)
                             }
@@ -134,7 +134,7 @@ module.exports = class NoAdminAbuse extends Plugin {
                                 <path fill='currentColor' d='M 15 11 L 14.846 5.985 L 16.463 4.823 C 15.469 3.5 14.756 2 12 2 C 9.242 2 7 4.243 7 7 V 11 C 5.897 11 5 11.896 5 13 V 20 C 5 21.103 5.897 22 7 22 H 17 C 18.103 22 19 21.103 19 20 V 13 C 19 11.896 18.103 11 17 11 Z M 12 18 C 11.172 18 10.5 17.328 10.5 16.5 C 10.5 15.672 11.172 15 12 15 C 12.828 15 13.5 15.672 13.5 16.5 C 13.5 17.328 12.828 18 12 18 Z M 15 11 H 9 V 7 C 9 5.346 10.346 4 12 4 C 13.654 4 14.301 5.253 14.846 5.985 Z'/>
                             </svg>
                         </>,
-                        tooltip: `${isLocked ? "Lock" : "Unlock"} The Channel`
+                        tooltip: `${isLocked ? "Unlock" : "Lock"} The Channel`
                     })
                 )
             }
