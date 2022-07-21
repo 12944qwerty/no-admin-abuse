@@ -26,7 +26,12 @@ class TextAreaWrapper extends React.Component { // needs to be in index for rere
         const { defaultColor } = getModule(['defaultColor'], false);
         const { title, button, buttonContainer, wrapper, image, content } = getModule(['title', 'wrapper', 'text'], false);
         const { sizeSmall, contents, grow, button: button2, lookFilled, colorPrimary } = getModule(['sizeSmall', 'contents'], false);
-	    if (isLocked) {
+
+        const { can: checkPermissions } = getModule(["getChannelPermissions"], false);
+        const { getChannel } = getModule(['getChannel', 'hasChannel'], false)
+        const channel = getChannel(this.props.args[0].channel.id);
+
+	    if (isLocked && checkPermissions(2048n, channel)) {
             return (
                 <div className={wrapper}>
                     <div className={content}>
@@ -94,10 +99,15 @@ module.exports = class NoAdminAbuse extends Plugin {
 
         const classes = await getModule([ 'iconWrapper', 'clickable' ]);
         const { icon } = await getModule(['icon', 'toolbar']);
+        const { can: checkPermissions } = await getModule(["getChannelPermissions"]);
+        const { getChannel } = await getModule(['getChannel', 'hasChannel']);
+
         const HeaderBarContainer = await getModule(m=> m?.default?.displayName === 'HeaderBar');
         this.inject('naa-no-talking-locker', HeaderBarContainer, 'default', (args, res) => {
             const isLocked = this.settings.get(args[0].children[2].key, false);
-            if (args[0].children[2].key) {
+            const channel = getChannel(args[0].children[2].key);
+
+            if (args[0].children[2].key && checkPermissions(2048n, channel)) {
                 res.props.children.props.children[1].props.children.props.children[0].unshift(
                     React.createElement(HeaderBarContainer.Icon, {
                         onClick: () => {
