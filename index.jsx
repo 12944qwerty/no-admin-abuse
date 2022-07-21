@@ -21,7 +21,7 @@ class TextAreaWrapper extends React.Component { // needs to be in index for rere
     }
 
     render() {
-        const isLocked = this.props.settings.get(this.props.args[0].channel.id, false)
+        const isLocked = this.props.settings.get('channels', []).includes(this.props.args[0].channel.id);
         const heading = getModule(['heading-md/medium'], false)['heading-md/medium'];
         const { defaultColor } = getModule(['defaultColor'], false);
         const { title, button, buttonContainer, wrapper, image, content } = getModule(['title', 'wrapper', 'text'], false);
@@ -42,7 +42,13 @@ class TextAreaWrapper extends React.Component { // needs to be in index for rere
                     </div>
                     <div class={buttonContainer}>
                         <button type="button" onClick={() => {
-                            this.props.settings.set(this.props.args[0].channel.id, !isLocked);
+                            let sets = this.props.settings.get('channels', [])
+                            if (isLocked) {
+                                sets.filter(i => i === this.props.args[0].channel.id);
+                            } else {
+                                sets.push(this.props.args[0].channel.id)
+                            }
+                            this.props.settings.set('channels', sets);
                             this.props.rerender();
                         }} className={`${button} ${button2} ${lookFilled} ${colorPrimary} ${sizeSmall} ${grow}`}>
                             <div className={contents}>Unlock</div>
@@ -104,15 +110,21 @@ module.exports = class NoAdminAbuse extends Plugin {
 
         const HeaderBarContainer = await getModule(m=> m?.default?.displayName === 'HeaderBar');
         this.inject('naa-no-talking-locker', HeaderBarContainer, 'default', (args, res) => {
-            const isLocked = this.settings.get(args[0].children[2].key, false);
+            const isLocked = this.settings.get('channels', []).includes(args[0].children[2].key);
             const channel = getChannel(args[0].children[2].key);
 
             if (args[0].children[2].key && checkPermissions(2048n, channel)) {
                 res.props.children.props.children[1].props.children.props.children[0].unshift(
                     React.createElement(HeaderBarContainer.Icon, {
-                        onClick: () => {
-                            this.settings.set(args[0].children[2].key, !isLocked);
-                            this.rerenderChannelLocks();
+                        onClick: () => {try{
+                            let sets = this.settings.get('channels', [])
+                            if (isLocked) {
+                                sets.filter(i => i === args[0].children[2].key);
+                            } else {
+                                sets.push(args[0].children[2].key)
+                            }
+                            this.settings.set('channels', sets);
+                            this.rerenderChannelLocks();}catch(err){console.log(err)}
                         },
                         icon: () => isLocked ? React.createElement(Icon, {
                             className: classes.icon,
