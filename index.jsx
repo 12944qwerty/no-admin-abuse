@@ -215,20 +215,20 @@ module.exports = class NoAdminAbuse extends Plugin {
                                 "tabIndex": -1
                             }
                         }),
-                        React.createElement(Menu.MenuCheckboxItem, {
-                            id: 'toggle-category-reordering',
-                            label: 'Lock Category Positions',
-                            checked: canCatReorder,
-                            action: () => {
-                                this.settings.set('no-category-reorder', !canCatReorder);
-                            },
-                            isFocused: false,
-                            menuItemProps: {
-                                "role": "menuitemcheckbox",
-                                "id": "guild-header-popout-toggle-category-reordering",
-                                "tabIndex": -1
-                            }
-                        })
+                        // React.createElement(Menu.MenuCheckboxItem, {
+                        //     id: 'toggle-category-reordering',
+                        //     label: 'Lock Category Positions',
+                        //     checked: canCatReorder,
+                        //     action: () => {
+                        //         this.settings.set('no-category-reorder', !canCatReorder);
+                        //     },
+                        //     isFocused: false,
+                        //     menuItemProps: {
+                        //         "role": "menuitemcheckbox",
+                        //         "id": "guild-header-popout-toggle-category-reordering",
+                        //         "tabIndex": -1
+                        //     }
+                        // })
                     )
                 );
             }

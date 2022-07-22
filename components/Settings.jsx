@@ -123,13 +123,13 @@ module.exports = class Settings extends React.PureComponent {
                 }}
                 note="When enabled, channels will not reorder when dragged."
             >Lock Channel Positions</SwitchItem>
-            <SwitchItem
+            {/* <SwitchItem
                 value={getSetting('no-category-reorder', false)}
                 onChange={() => {
                     toggleSetting('no-category-reorder', false)
                 }}
                 note="When enabled, categories will not reorder when dragged."
-            >Lock Category Positions</SwitchItem>
+            >Lock Category Positions</SwitchItem> */}
             
             <TextInputWithTags
                 title="Can't talk in these channels"
