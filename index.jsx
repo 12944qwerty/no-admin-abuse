@@ -197,7 +197,7 @@ module.exports = class NoAdminAbuse extends Plugin {
             const canCatReorder = this.settings.get('no-category-reorder', false);
 
             if (!findInReactTree(res, (c) => c.props && c.props.id == id)) {
-                children.push(
+                children.splice(children.length - 3, 0,  // Done this way so that it works for people with or without guild profile
                     React.createElement(
                         Menu.MenuGroup,
                         null,
