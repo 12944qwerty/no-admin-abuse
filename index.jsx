@@ -193,42 +193,34 @@ module.exports = class NoAdminAbuse extends Plugin {
             const guild = getGuild(getGuildId());
             if (!can(Permissions.MANAGE_CHANNELS, guild) && getGuildId() !== "@favorites") return res;
 
-            const canReorder = this.settings.get('no-channel-reorder', false);
-            const canCatReorder = this.settings.get('no-category-reorder', false);
+            let canReorder = this.settings.get('no-channel-reorder', false);
+
+            const [, forceRerender] = React.useState();
+            
+            const el = React.createElement(Menu.MenuCheckboxItem, {
+                id: 'toggle-channel-reordering',
+                label: 'Lock Channel Positions',
+                checked: canReorder,
+                action: () => {
+                    canReorder = !canReorder;
+                    this.settings.set('no-channel-reorder', canReorder);
+                    el.props.checked = canReorder;
+                    forceRerender(Math.random());
+                },
+                isFocused: false,
+                menuItemProps: {
+                    "role": "menuitemcheckbox",
+                    "id": "guild-header-popout-toggle-channel-reordering",
+                    "tabIndex": -1
+                }
+            });
 
             if (!findInReactTree(res, (c) => c.props && c.props.id == id)) {
                 children.splice(children.length - 3, 0,  // Done this way so that it works for people with or without guild profile
                     React.createElement(
                         Menu.MenuGroup,
                         null,
-                        React.createElement(Menu.MenuCheckboxItem, {
-                            id: 'toggle-channel-reordering',
-                            label: 'Lock Channel Positions',
-                            checked: canReorder,
-                            action: () => {
-                                this.settings.set('no-channel-reorder', !canReorder);
-                            },
-                            isFocused: false,
-                            menuItemProps: {
-                                "role": "menuitemcheckbox",
-                                "id": "guild-header-popout-toggle-channel-reordering",
-                                "tabIndex": -1
-                            }
-                        }),
-                        // React.createElement(Menu.MenuCheckboxItem, {
-                        //     id: 'toggle-category-reordering',
-                        //     label: 'Lock Category Positions',
-                        //     checked: canCatReorder,
-                        //     action: () => {
-                        //         this.settings.set('no-category-reorder', !canCatReorder);
-                        //     },
-                        //     isFocused: false,
-                        //     menuItemProps: {
-                        //         "role": "menuitemcheckbox",
-                        //         "id": "guild-header-popout-toggle-category-reordering",
-                        //         "tabIndex": -1
-                        //     }
-                        // })
+                        el
                     )
                 );
             }
